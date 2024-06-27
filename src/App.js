@@ -12,7 +12,7 @@ function App() {
 
   const addTask = () => {
     if (taskInput.trim() !== '') {
-      const dateKey = format(currentDate, 'yyyy-MM-dd');
+      const dateKey = format(currentDate, 'dd.MM.yyyy');
       setTasks({
         ...tasks,
         [dateKey]: [...(tasks[dateKey] || []), taskInput],
@@ -22,7 +22,7 @@ function App() {
   };
 
   const deleteTask = (index) => {
-    const dateKey = format(currentDate, 'yyyy-MM-dd');
+    const dateKey = format(currentDate, 'dd.MM.yyyy');
     const newTasksForDate = tasks[dateKey].filter((_, i) => i !== index);
     setTasks({
       ...tasks,
@@ -34,7 +34,16 @@ function App() {
     setCurrentDate(addDays(currentDate, days));
   };
 
-  const tasksForCurrentDate = tasks[format(currentDate, 'yyyy-MM-dd')] || [];
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      addTask();
+    }
+  };
+
+  const tasksForCurrentDate = tasks[format(currentDate, 'dd.MM.yyyy')] || [];
+  const tasksForBeforeDate = tasks[format(subDays(currentDate, 1), 'dd.MM.yyyy')] || [];
+  const tasksForLaterDate = tasks[format(addDays(currentDate, 1), 'dd.MM.yyyy')] || [];
 
   const getDateStateText = () => {
     const diff = differenceInCalendarDays(currentDate, today);
@@ -66,12 +75,29 @@ function App() {
           type="text"
           value={taskInput}
           onChange={(e) => setTaskInput(e.target.value)}
+          onKeyDown={handleKeyDown}
           placeholder="Enter a new task"
         />
-        <button onClick={addTask}>Add Task</button>
+      </div>
+      .
+      <div className='task-list-before'>
+      {tasksForBeforeDate.map((task, index) => (
+          <div key={index} className="task">
+            {task}
+            <button onClick={() => deleteTask(index)}>Delete</button>
+          </div>
+        ))}
       </div>
       <div className="task-list">
         {tasksForCurrentDate.map((task, index) => (
+          <div key={index} className="task">
+            {task}
+            <button onClick={() => deleteTask(index)}>Delete</button>
+          </div>
+        ))}
+      </div>
+      <div className="task-list-later">
+        {tasksForLaterDate.map((task, index) => (
           <div key={index} className="task">
             {task}
             <button onClick={() => deleteTask(index)}>Delete</button>

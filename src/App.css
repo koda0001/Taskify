@@ -1,4 +1,3 @@
-/* src/App.css */
 .App {
   text-align: center;
 }
@@ -51,7 +50,21 @@
 }
 
 .task-list {
+  justify-content: space-between;
   margin-top: 20px;
+  width: 30%;
+}
+
+.task-list-before{
+  justify-content: space-between;
+  margin-top: 20px;
+  width: 30%;
+}
+
+.task-list-later{
+  justify-content: space-between;
+  margin-top: 20px;
+  width: 30%;
 }
 
 .task {
